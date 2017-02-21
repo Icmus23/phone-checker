@@ -29,8 +29,7 @@
         "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "^2.0",
         "twig/twig": "^1.0||^2.0",
-        "guzzlehttp/guzzle": "~6.0",
-        "symfony/dom-crawler": "3.2.4"
+        "guzzlehttp/guzzle": "~6.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

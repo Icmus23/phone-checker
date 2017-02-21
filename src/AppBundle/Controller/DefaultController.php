@@ -7,7 +7,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use GuzzleHttp\Client;
-use Symfony\Component\DomCrawler\Crawler;
+use \Swift_Message;
+use \Swift_MailTransport;
+use \Swift_Mailer;
 
 class DefaultController extends Controller
 {
@@ -33,6 +35,27 @@ class DefaultController extends Controller
 
         $result = isset($matches[1]) ? $matches[1] : '';
 
-        return new Response($result.' <a href="'.$host.$uri.'">В магазин</a>');
+        $response = '<p>'.$result.' <a href="'.$host.$uri.'">В магазин</a></p>';
+
+        $this->sendEmail($response, 'icmus.mail@gmail.com');
+
+        return new Response();
+    }
+
+    private function sendEmail($text, $to)
+    {
+        $message = Swift_Message::newInstance()
+            ->setContentType('text/html')
+            ->setCharset('utf-8')
+            ->setSubject('Phone is here')
+            ->setFrom('icmus.mail@gmail.com')
+            ->setTo($to)
+            ->setBody($text);
+
+        if ($this->get('mailer')->send($message)) {
+            echo 'sended';
+        } else {
+            echo 'error';
+        }
     }
 }
