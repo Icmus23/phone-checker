@@ -13,31 +13,25 @@ use \Swift_Mailer;
 
 class DefaultController extends Controller
 {
+    const MI_HOST = 'https://mi.ua';
+    const MI_URI = '/mi-phones/smartfon-xiaomi-redmi-4-dark-gray-332-gb-ukrainska-versiya/';
+
     /**
      * @Route("/", name="homepage")
      */
     public function indexAction(Request $request)
     {
-        $host = 'https://mi.ua';
-        $uri = '/mi-phones/smartfon-xiaomi-redmi-4-dark-gray-332-gb-ukrainska-versiya/';
+        $response = $this->sendRequest();
 
-        $client = new Client([
-            'base_uri' => $host,
-            'timeout'  => 2.0,
-        ]);
+        $result = $this->parseResponse($response);
 
-        $response = $client->request('GET', $uri);
+        $text = $this->buildEmailText($result);
 
-        $pageContent = (string) $response->getBody();
+        if ($this->isPhoneAvailableForSale($result)) {
+            $this->sendEmail($text, 'icmus.mail@gmail.com');
+        }
 
-        $pattern = "/<div class=\"product-stock\"><i .*><\/i>(.*)<\/div>/";
-        preg_match($pattern, $pageContent, $matches);
-
-        $result = isset($matches[1]) ? $matches[1] : '';
-
-        $response = '<p>'.$result.' <a href="'.$host.$uri.'">В магазин</a></p>';
-
-        $this->sendEmail($response, 'icmus.mail@gmail.com');
+        echo $text;
 
         return new Response();
     }
@@ -57,5 +51,39 @@ class DefaultController extends Controller
         } else {
             echo 'error';
         }
+    }
+
+    private function isPhoneAvailableForSale($result)
+    {
+        if ($result != 'Немає в наявності') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private function parseResponse($response)
+    {
+        $pageContent = (string) $response->getBody();
+
+        $pattern = "/<div class=\"product-stock\"><i .*><\/i>(.*)<\/div>/";
+        preg_match($pattern, $pageContent, $matches);
+
+        return isset($matches[1]) ? $matches[1] : '';
+    }
+
+    private function sendRequest()
+    {
+        $client = new Client([
+            'base_uri' => self::MI_HOST,
+            'timeout'  => 2.0,
+        ]);
+
+        return $client->request('GET', self::MI_URI);
+    }
+
+    private function buildEmailText($result)
+    {
+        return '<p>'.$result.' <a href="'.self::MI_HOST.self::MI_URI.'">В магазин</a></p>';
     }
 }
