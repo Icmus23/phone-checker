@@ -7,3 +7,9 @@ services:
 #    service_name:
 #        class: AppBundle\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+    app:
+        class: AppBundle\Service\AppService
+
+    phone_checker:
+        class: AppBundle\Service\PhoneCheckerService
+        arguments: ["@app"]
