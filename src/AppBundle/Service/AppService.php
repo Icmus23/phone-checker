@@ -12,6 +12,13 @@ class AppService
 {
     private $httpMethods = ['POST', 'GET', 'PUT', 'DELETE', 'PATCH',];
 
+    private $mailer;
+
+    public function __construct($mailer)
+    {
+        $this->mailer = $mailer;
+    }
+
     public function sendRequest($method, $host, $uri)
     {
         if (!in_array($method, $this->httpMethods)) {
@@ -29,11 +36,11 @@ class AppService
         $message = Swift_Message::newInstance()
             ->setContentType('text/html')
             ->setCharset('utf-8')
-            ->setSubject($from)
+            ->setSubject($subject)
             ->setFrom($from)
             ->setTo($to)
             ->setBody($text);
 
-        return $this->get('mailer')->send($message);
+        return $this->mailer->send($message);
     }
 }
