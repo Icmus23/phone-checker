@@ -29,6 +29,16 @@ class ApiV1Controller extends Controller
 
         $this->container->get('monolog.logger.api')->info($result);
 
+        if ($phoneCheckerService->isPhoneAvailableForSale($result)) {
+            $text = $phoneCheckerService->buildEmailText($result);
+            $this->container->get('app')->sendEmail(
+                'icmus.mail@gmail.com',
+                'icmus.mail@gmail.com',
+                'Phone is here',
+                $text
+            );
+        }
+
         $response = new JsonResponse();
         $response->setData(array(
             'status' => $result
