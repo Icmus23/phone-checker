@@ -22,7 +22,7 @@ class DefaultController extends Controller
             'base_uri' => $host,
             'timeout'  => 2.0,
         ]);
-
+        // response
         $response = $client->request('GET', $uri);
         // page content
         $pageContent = (string) $response->getBody();
