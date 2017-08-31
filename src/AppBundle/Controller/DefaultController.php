@@ -17,7 +17,7 @@ class DefaultController extends Controller
     {
         $host = 'https://mi.ua';
         $uri = '/mi-phones/smartfon-xiaomi-redmi-4-dark-gray-332-gb-ukrainska-versiya/';
-
+        // client
         $client = new Client([
             'base_uri' => $host,
             'timeout'  => 2.0,
