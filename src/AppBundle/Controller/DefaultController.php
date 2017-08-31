@@ -15,6 +15,7 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
+        // host
         $host = 'https://mi.ua';
         $uri = '/mi-phones/smartfon-xiaomi-redmi-4-dark-gray-332-gb-ukrainska-versiya/';
         // client
