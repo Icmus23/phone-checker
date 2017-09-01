@@ -27,7 +27,7 @@ class DefaultController extends Controller
         $response = $client->request('GET', $uri);
         // page content
         $pageContent = (string) $response->getBody();
-
+        // pattern
         $pattern = "/<div class=\"product-stock\"><i .*><\/i>(.*)<\/div>/";
         preg_match($pattern, $pageContent, $matches);
 
