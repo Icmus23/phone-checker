@@ -29,6 +29,7 @@ class DefaultController extends Controller
         $pageContent = (string) $response->getBody();
         // pattern
         $pattern = "/<div class=\"product-stock\"><i .*><\/i>(.*)<\/div>/";
+        // matching regexp
         preg_match($pattern, $pageContent, $matches);
 
         $result = isset($matches[1]) ? $matches[1] : '';
